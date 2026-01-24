@@ -23,6 +23,7 @@ This repo focuses on:
 ```bash
 git clone https://github.com/Hamafet/oh-my-dotfiles.git ~/oh-my-dotfiles
 cd ~/oh-my-dotfiles
+chmod u+x ./bootstrap.sh
 ./bootstrap.sh
 ```
 
