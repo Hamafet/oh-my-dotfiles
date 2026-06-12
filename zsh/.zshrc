@@ -37,8 +37,8 @@ ZSH_THEME="candy"
 # Uncomment the following line to disable colors in ls.
 # DISABLE_LS_COLORS="true"
 
-# Uncomment the following line to disable auto-setting terminal title.
-# DISABLE_AUTO_TITLE="true"
+# Disable Oh My Zsh terminal title updates so mycmd session status owns the title.
+DISABLE_AUTO_TITLE="true"
 
 # Uncomment the following line to enable command auto-correction.
 # ENABLE_CORRECTION="true"
@@ -112,11 +112,16 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 export PATH=~/bin:$PATH
-export PATH=~/bin:$PATH
 
 # opencode
 export PATH=/home/neo/.opencode/bin:$PATH
-export PATH="$HOME/.local/bin:$PATH"
+export PATH="$HOME/.local/bin:$PATH:/home/neo/x-tools/arm-training-linux-musleabihf/bin/"
 eval "$(zoxide init zsh)"
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+chpwd() {
+  ls
+}
+
+alias z=cd
