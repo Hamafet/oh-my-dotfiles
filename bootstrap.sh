@@ -8,7 +8,7 @@ need_cmd() { command -v "$1" >/dev/null 2>&1; }
 
 install_apt() {
   sudo apt update
-  sudo apt install -y git curl wget fzf zoxide stow zsh tmux neovim \
+  sudo apt install -y git curl wget fzf zoxide stow zsh tmux \
     ripgrep fd-find build-essential unzip
 
   # fd symlink for LazyVim/telescope (apt names it fdfind)
@@ -44,6 +44,25 @@ install_oh_my_tmux() {
   [ -d "$HOME/.tmux" ] || curl -fsSL "https://github.com/gpakosz/.tmux/raw/refs/heads/master/install.sh#$(date +%s)" | bash
 }
 
+install_neovim() {
+  local minver="0.11.2"
+  local nvim_bin="$HOME/.local/bin/nvim"
+
+  # skip if already new enough
+  if [ -x "$nvim_bin" ]; then
+    local ver
+    ver=$("$nvim_bin" --version 2>/dev/null | head -1 | grep -oP '\d+\.\d+\.\d+' || echo "0.0.0")
+    if [ "$(printf '%s\n' "$minver" "$ver" | sort -V | head -1)" = "$minver" ]; then
+      return 0
+    fi
+  fi
+
+  log "installing Neovim >= $minver from GitHub"
+  mkdir -p "$HOME/.local"
+  curl -fsSL https://github.com/neovim/neovim/releases/latest/download/nvim-linux-x86_64.tar.gz \
+    | tar xz -C "$HOME/.local" --strip-components=1
+}
+
 install_oh_my_zsh() {
   [ -d "$HOME/.oh-my-zsh" ] || RUNZSH=no CHSH=no sh -c "$(wget https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh -O -)"
 }
@@ -66,6 +85,7 @@ main() {
   rm -f "$HOME/.zshrc"           # discard OMZ template; stow links ours
   install_zsh_plugins
   install_kitty
+  install_neovim
   install_oh_my_tmux
   stow_dotfiles
 }
